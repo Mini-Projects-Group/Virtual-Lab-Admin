@@ -6,6 +6,7 @@ import StaticPages from "./components/StaticPages";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 import { BrowserRouter } from "react-router-dom";
+import Login from "./components/Login/Login";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <PrivateRoute exact path='/auth' component={AuthPages} />
+          <PublicRoute exact path="/login" component={Login} />
           <PublicRoute path='/' component={StaticPages} />
         </Switch>
       </BrowserRouter>
