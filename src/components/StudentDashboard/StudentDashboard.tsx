@@ -2,8 +2,9 @@ import { Button, Input, Space, Spin, Table, Tag } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { PRIMARY, SERVER_URL } from "../../constants";
+import { PRIMARY, SERVER_URL, WHITE } from "../../constants";
 import axios from "axios";
+import NewStudent from "./NewStudent";
 
 const getYear = (num: any) => {
   switch (num) {
@@ -165,29 +166,36 @@ const getYear = (num: any) => {
 //   },
 // ];
 
-const StudentDashboard = () => {
+const StudentDashboard = (props) => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
+  const f = async () => {
+    
+    const res = await axios.get(`${SERVER_URL}/student/getAll`);
+    console.log(res.data.students);
+
+    const data = res.data?.students.map((item, i) => {
+      return {
+        key: i,
+        ...item,
+      };
+    });
+
+    setStudents(data);
+    console.log(data);
+  };
+
+
   useEffect(() => {
-    setLoading(true);
-    const f = async () => {
-      const res = await axios.get(`${SERVER_URL}/student/getAll`);
-      console.log(res.data.students);
-
-      const data = res.data?.students.map((item, i) => {
-        return {
-          key: i,
-          ...item,
-        };
-      });
-
-      setStudents(data);
-      console.log(data);
-    };
+    setLoading(true); 
     f();
     setLoading(false);
   }, [students?.length]);
+
+
+  
 
   const [state, setState] = useState({
     searchText: "",
@@ -375,8 +383,11 @@ const StudentDashboard = () => {
 
   return (
     <div
-      style={{ minHeight: "100vh", background: PRIMARY, padding: "45px 20px" }}
+      style={{ minHeight: "100vh", background: WHITE, padding: "45px 20px" }}
     >
+
+      <NewStudent f={f} {...props}/>
+
       <Table
         pagination={{
           position: ["bottomRight"],
