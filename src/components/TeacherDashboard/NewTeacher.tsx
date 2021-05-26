@@ -1,10 +1,20 @@
-import { Button, Input, Form, Modal, Alert, Upload, message } from "antd";
+import {
+  Button,
+  Input,
+  Form,
+  Modal,
+  Alert,
+  Upload,
+  message,
+  Select,
+} from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import { SERVER_URL } from "../../constants";
 import { UploadOutlined } from "@ant-design/icons";
+const { Option } = Select;
 
-const NewStudent = ({ f, ...props }) => {
+const NewTeacher = ({ f, ...props }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [choice, setChoice]: [Number, any] = useState(1);
@@ -24,11 +34,12 @@ const NewStudent = ({ f, ...props }) => {
   };
 
   const handleSubmit = async (val: any) => {
+    console.log(val);
     setDisabled(true);
 
     let data = await axios.post(
       `${SERVER_URL}/user/register`,
-      { type: "student", ...val },
+      { type: "faculty", ...val },
       {
         headers: {
           authorization: `Bearer ${localStorage.getItem("vl-token")}`,
@@ -52,25 +63,27 @@ const NewStudent = ({ f, ...props }) => {
     setDisabled(false);
   };
 
-  const beforeUpload = (file) => {
-    return file.name.slice(-3) == "csv" ? true : Upload.LIST_IGNORE;
-  };
+  const childrenBatches = [];
 
-  const onFileUpload = (info) => {
-    setFile(info.fileList.slice(-1));
+  const subjects = ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"];
+  const batches = ["E", "F", "G", "H", "K", "L", "M", "N", "P", "Q", "R", "S"];
+  const numbers = ["1", "2", "3", "4"];
 
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
+  for (let i = 0; i < subjects.length; i++) {
+    for (let j = 0; j < batches.length; j++) {
+      for (let k = 0; k < numbers.length; k++) {
+        let temp = subjects[i] + " " + batches[j] + numbers[k];
+        childrenBatches.push(
+          <Option value={temp} key={temp}>
+            {temp}
+          </Option>
+        );
+      }
     }
-    if (info.file.status === "done") {
-      message.success(`${info.file.name} file uploaded successfully`);
+  }
 
-      handleCancel();
-      setFile([]);
-      f();
-    } else if (info.file.status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
+  const handleBatchesChange = (value) => {
+    console.log(value);
   };
 
   return (
@@ -87,17 +100,13 @@ const NewStudent = ({ f, ...props }) => {
         }}
       >
         <Button style={{ marginRight: "5px" }} onClick={() => showModal(0)}>
-          Add Student
+          Add Faculty
         </Button>
 
-        <Button type="primary" onClick={() => showModal(1)}>
-          Upload CSV
-        </Button>
-
-        {/* ADD NEW STUDENT MODAL */}
+        {/* ADD NEW FACULTY MODAL */}
         <Modal
           centered
-          title={choice == 0 ? "New Student" : "Upload a CSV"}
+          title={choice == 0 ? "New Faculty" : "Upload a CSV"}
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
@@ -139,16 +148,6 @@ const NewStudent = ({ f, ...props }) => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Roll No"
-                  name="roll_no"
-                  rules={[
-                    { required: true, message: "Roll No cannot be empty" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
                   label="Registration ID"
                   name="registration_id"
                   rules={[
@@ -161,36 +160,41 @@ const NewStudent = ({ f, ...props }) => {
                   <Input />
                 </Form.Item>
 
+                <Form.Item
+                  label="Branch"
+                  name="branch"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Branch cannot be empty",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  label="Batches"
+                  name="batches"
+                  rules={[{ required: true, message: "Email cannot be empty" }]}
+                >
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Please select"
+                    defaultValue={[]}
+                    onChange={handleBatchesChange}
+                  >
+                    {childrenBatches}
+                  </Select>
+                </Form.Item>
                 <Form.Item>
                   <Button disabled={disabled} type="primary" htmlType="submit">
-                    Add Student
+                    Add Faculty
                   </Button>
                 </Form.Item>
               </Form>
-            </>
-          )}
-
-          {choice == 1 && (
-            <>
-              <p>
-                Only CSV file is supported{" "}
-                <small>
-                  (Columns required <i>RegistrationID, Name, RollNo,Email</i>)
-                </small>
-              </p>
-              <Upload
-                fileList={file}
-                multiple={false}
-                onChange={onFileUpload}
-                beforeUpload={beforeUpload}
-                action={`${SERVER_URL}/admin/new/students/file`}
-                name="file"
-                headers={{
-                  authorization: `Bearer ${localStorage.getItem("vl-token")}`,
-                }}
-              >
-                <Button icon={<UploadOutlined />}>Choose file</Button>
-              </Upload>
             </>
           )}
         </Modal>
@@ -200,4 +204,4 @@ const NewStudent = ({ f, ...props }) => {
   );
 };
 
-export default NewStudent;
+export default NewTeacher;

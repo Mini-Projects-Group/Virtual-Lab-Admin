@@ -282,7 +282,7 @@ const StudentDashboard = (props) => {
       ),
     },
     {
-      title: "Delete",
+      title: "Update",
       dataIndex: "operation",
       width: "10%",
       render: (_, record) => (
