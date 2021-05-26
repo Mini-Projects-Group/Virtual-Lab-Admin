@@ -1,11 +1,11 @@
-import { Button, Input, Space, Spin, Table, Tag } from "antd";
+import { Button, Input, Popconfirm, Space, Spin, Table, Tag, Form } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { PRIMARY, SERVER_URL, WHITE } from "../../constants";
 import axios from "axios";
 import NewStudent from "./NewStudent";
-
+import Modal from "antd/lib/modal/Modal";
 const getYear = (num: any) => {
   switch (num) {
     case 1:
@@ -19,166 +19,34 @@ const getYear = (num: any) => {
   }
 };
 
-// const data = [
-//   {
-//     key: "1",
-//     name: "Sanket Mundada",
-//     email: "mundadasanket2000@gmail.com",
-//     registration_id: "C2K18105870",
-//     roll_no: 31142,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "2",
-//     name: "Nimish Dadlani",
-//     email: "nmd2611@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31143,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "3",
-//     name: "Pradyumnaraje Patil",
-//     email: "pradyumnaraje@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31147,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "1",
-//     name: "Sanket Mundada",
-//     email: "mundadasanket2000@gmail.com",
-//     registration_id: "C2K18105870",
-//     roll_no: 31142,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "2",
-//     name: "Nimish Dadlani",
-//     email: "nmd2611@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31143,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "3",
-//     name: "Pradyumnaraje Patil",
-//     email: "pradyumnaraje@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31147,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "1",
-//     name: "Sanket Mundada",
-//     email: "mundadasanket2000@gmail.com",
-//     registration_id: "C2K18105870",
-//     roll_no: 31142,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "2",
-//     name: "Nimish Dadlani",
-//     email: "nmd2611@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31143,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "3",
-//     name: "Pradyumnaraje Patil",
-//     email: "pradyumnaraje@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31147,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "1",
-//     name: "San Mundada",
-//     email: "mundadasanket2000@gmail.com",
-//     registration_id: "C2K18105870",
-//     roll_no: 31142,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "2",
-//     name: "Nimish Dadlani",
-//     email: "nmd2611@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31143,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-//   {
-//     key: "3",
-//     name: "Pradyumnaraje Patil",
-//     email: "pradyumnaraje@gmail.com",
-//     registration_id: "C2K1111111",
-//     roll_no: 31147,
-//     year: getYear(3),
-//     branch: "C",
-//     div: "1",
-//     batch: "M1",
-//     subjects: ["SDL", "CNL", "DBMSL", "ESIOTL", "WTL", "SPOSL"],
-//   },
-// ];
-
 const StudentDashboard = (props) => {
+  /* Update Modal */
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleCancel = () => {
+    setSelectedStudent(null);
+    setIsModalVisible(false);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const [form] = Form.useForm();
+  const [disabled, setDisabled] = useState(false);
+
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   const f = async () => {
-    
     const res = await axios.get(`${SERVER_URL}/student/getAll`);
     console.log(res.data.students);
 
     const data = res.data?.students.map((item, i) => {
       return {
-        key: i,
+        key: item.email,
         ...item,
       };
     });
@@ -187,15 +55,11 @@ const StudentDashboard = (props) => {
     console.log(data);
   };
 
-
   useEffect(() => {
-    setLoading(true); 
+    setLoading(true);
     f();
     setLoading(false);
   }, [students?.length]);
-
-
-  
 
   const [state, setState] = useState({
     searchText: "",
@@ -310,6 +174,18 @@ const StudentDashboard = (props) => {
     };
   };
 
+  const handleDelete = (item) => {
+    console.log(item);
+  };
+
+  const handleUpdate = (record) => {
+    console.log(record);
+    setSelectedStudent(record);
+    setIsModalVisible(true);
+  };
+
+  const handleUpdateSubmit = (val: any) => {};
+
   const columns = [
     {
       title: "Name",
@@ -343,7 +219,7 @@ const StudentDashboard = (props) => {
       title: "Year",
       dataIndex: "year",
       key: "year",
-      width: "10%",
+      width: "5%",
       ...getColumnSearchProps("year", "year"),
     },
     {
@@ -358,7 +234,7 @@ const StudentDashboard = (props) => {
       title: "Div",
       dataIndex: "div",
       key: "div",
-      width: "10%",
+      width: "5%",
       ...getColumnSearchProps("div", "div"),
     },
     {
@@ -375,6 +251,28 @@ const StudentDashboard = (props) => {
       width: "20%",
       ...getColumnSearchProps("subjects", "subjects"),
     },
+
+    {
+      title: "Delete",
+      dataIndex: "operation",
+      width: "10%",
+      render: (_, record) => (
+        <Popconfirm
+          title="Sure to delete?"
+          onConfirm={() => handleDelete(record.key)}
+        >
+          <a>Delete</a>
+        </Popconfirm>
+      ),
+    },
+    {
+      title: "Delete",
+      dataIndex: "operation",
+      width: "10%",
+      render: (_, record) => (
+        <Button onClick={() => handleUpdate(record)}>Update</Button>
+      ),
+    },
   ];
 
   console.log(students);
@@ -385,8 +283,7 @@ const StudentDashboard = (props) => {
     <div
       style={{ minHeight: "100vh", background: WHITE, padding: "45px 20px" }}
     >
-
-      <NewStudent f={f} {...props}/>
+      <NewStudent f={f} {...props} />
 
       <Table
         pagination={{
@@ -396,9 +293,73 @@ const StudentDashboard = (props) => {
           onChange: handleChange,
           onShowSizeChange: handlePageChange,
         }}
+        bordered
         columns={columns}
         dataSource={students}
       />
+
+      <Modal
+        centered
+        title={"Update Student"}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form
+          form={form}
+          name="basic"
+          layout={"vertical"}
+          initialValues={{
+            email: selectedStudent?.email,
+            name: selectedStudent?.name,
+            roll_no: selectedStudent?.roll_no,
+            registration_id: selectedStudent?.registration_id,
+          }}
+          onFinish={handleUpdateSubmit}
+        >
+          {console.log(selectedStudent)}
+          <br />
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Email cannot be empty" }]}
+          >
+            <Input type="email" />
+          </Form.Item>
+
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Name cannot be empty" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Roll no"
+            name="roll_no"
+            rules={[{ required: true, message: "Roll_no cannot be empty" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Registration_Id"
+            name="registration_id"
+            rules={[
+              { required: true, message: "Registered_Id cannot be empty" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item>
+            <Button disabled={disabled} type="primary" htmlType="submit">
+              Update Student
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
