@@ -41,8 +41,8 @@ const StudentDashboard = (props) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const f = async () => {
-    const res = await axios.get(`${SERVER_URL}/student/getAll`);
-    console.log(res.data.students);
+    const res = await axios.get(`${SERVER_URL}/user/getAll/student`);
+    console.log(res.data, students);
 
     const data = res.data?.students.map((item, i) => {
       return {
@@ -174,8 +174,13 @@ const StudentDashboard = (props) => {
     };
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = async (item) => {
     console.log(item);
+    setLoading(true);
+    const res = await axios.delete(`${SERVER_URL}/user/delete/student/${item}`);
+    console.log(res);
+    await f();
+    setLoading(false);
   };
 
   const handleUpdate = (record) => {
@@ -184,7 +189,18 @@ const StudentDashboard = (props) => {
     setIsModalVisible(true);
   };
 
-  const handleUpdateSubmit = (val: any) => {};
+  const handleUpdateSubmit = async (val: any) => {
+    console.log(val);
+    setLoading(true);
+    const res = await axios.put(`${SERVER_URL}/user/update`, {
+      type: "student",
+      ...val,
+    });
+    console.log(res);
+    handleCancel();
+    await f();
+    setLoading(false);
+  };
 
   const columns = [
     {
