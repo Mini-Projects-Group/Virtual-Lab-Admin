@@ -15,8 +15,7 @@ function LabDashboard() {
                 authorization: `Bearer ${localStorage.getItem('vl-token')}`
             }
         });
-        console.log(data.data.results[0]);
-        setLabs(data.data.results);
+        setLabs(data?.data?.results);
     }
     useEffect(() => {
         fetchLabs();
@@ -28,7 +27,7 @@ function LabDashboard() {
             <Button type="primary" onClick={() => history.push('/auth')} style={{margin: '5px'}}>Go Back</Button>
             <Row>
                 {
-                    labs.map((l, idx) => (
+                    labs?.map((l, idx) => (
                         <Col style={{padding: '10px'}} span={6}>
                             <Lab key={idx} {...l} fetchLabs={fetchLabs} />
                         </Col>
