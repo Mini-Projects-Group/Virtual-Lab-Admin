@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import Login from "./components/Login/Login";
 import StudentDashboard from "./components/StudentDashboard/StudentDashboard";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
+import LabDashboard from "./components/LabDashboard/LabDashboard";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <PrivateRoute exact path="/auth" component={AuthPages} />
           <PrivateRoute exact path="/sdashboard" component={StudentDashboard} />
           <PrivateRoute exact path="/fdashboard" component={TeacherDashboard} />
+          <PrivateRoute exact path="/ldashboard" component={LabDashboard} />
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute path="/" component={StaticPages} />
         </Switch>

@@ -42,6 +42,9 @@ const AuthPages = () => {
           <Button onClick={facultyDashboard} type="primary">
             Faculty Dashboard
           </Button>
+          <Button onClick={() => history.push('/ldashboard')} type="primary">
+            Lab Dashboard
+          </Button>
           <Button onClick={logout}>Logout</Button>
         </div>
       )}

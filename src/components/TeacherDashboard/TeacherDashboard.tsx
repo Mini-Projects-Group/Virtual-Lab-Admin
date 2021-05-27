@@ -73,7 +73,7 @@ const TeacherDashboard = (props) => {
     const res = await axios.get(`${SERVER_URL}/user/getAll/faculty`);
     console.log(res.data, faculties);
 
-    const data = res.data?.faculties.map((item, i) => {
+    const data = res.data?.faculties?.map((item, i) => {
       return {
         key: item.email,
         ...item,
