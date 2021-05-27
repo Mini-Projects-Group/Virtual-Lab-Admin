@@ -15,6 +15,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
+          <PrivateRoute exact path="/auth" component={AuthPages} />
           <PrivateRoute exact path="/sdashboard" component={StudentDashboard} />
           <PrivateRoute exact path="/fdashboard" component={TeacherDashboard} />
           <PublicRoute exact path="/login" component={Login} />
